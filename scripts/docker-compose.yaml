@@ -23,3 +23,27 @@ services:
       MYSQL_DATABASE: test
     volumes:
       - ./mysql/data:/var/lib/mysql
+  zookeeper:
+    image: zookeeper:3.6.2
+    mem_limit: 128m
+    container_name: zookeeper
+    restart: always
+    ports:
+      - 2181:2181
+    volumes:
+      - ./zookeeper/data:/data
+      - ./zookeeper/datalog:/datalog
+  kafka:
+    image: confluentinc/cp-kafka:5.5.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
