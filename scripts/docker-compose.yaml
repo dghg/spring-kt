@@ -11,3 +11,15 @@ services:
     volumes:
       - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
       - ./redis/data:/data
+  mysql:
+    image: mysql:8.0.21
+    mem_limit: 512m
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+    volumes:
+      - ./mysql/data:/var/lib/mysql
