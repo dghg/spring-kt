@@ -27,3 +27,6 @@ hs_err_pid*
 scripts/mysql
 scripts/redis/data
 scripts/zookeeper
+
+.idea
+.DS_Store
